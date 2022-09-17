@@ -37,7 +37,7 @@ class AlienInvasion:
                 self._check_keyup_events(event)
 
     def _check_keydown_events(self, event):
-        """Реагирует на нажатие клавиш"""
+        """Responds to key presses"""
         if event.key == pygame.K_RIGHT:
             # Переместить корабль вправо.
             self.ship.moving_right = True
@@ -47,14 +47,14 @@ class AlienInvasion:
             sys.exit()
 
     def _check_keyup_events(self, event):
-        """Реагирует на отпускание клавиш"""
+        """Responds to key release"""
         if event.key == pygame.K_RIGHT:
             self.ship.moving_right = False
         elif event.key == pygame.K_LEFT:
             self.ship.moving_left = False
 
     def _update_screen(self):
-        """Обновляет изображение на экране и отображает новый экран."""
+        """Refreshes the screen image and displays the new screen."""
         self.screen.fill(self.settings.bg_color)
         self.ship.blitme()
         # Отображение последнего прорисованного экрана.
