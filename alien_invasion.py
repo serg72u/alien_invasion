@@ -28,6 +28,13 @@ class AlienInvasion:
             self.ship.update()
             self.bullets.update()
             self._update_screen()
+            self._del_bullets()
+    def _del_bullets(self):
+        """Удаление снарядов, вышедших за край экрана."""
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
+
 
     def _check_events(self):
         """Обрабатывает нажатия клавиш и события мыши."""
