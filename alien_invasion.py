@@ -28,12 +28,7 @@ class AlienInvasion:
             self.ship.update()
             self.bullets.update()
             self._update_screen()
-            self._del_bullets()
-    def _del_bullets(self):
-        """Удаление снарядов, вышедших за край экрана."""
-        for bullet in self.bullets.copy():
-            if bullet.rect.bottom <= 0:
-                self.bullets.remove(bullet)
+            self._update_bullets()
 
 
     def _check_events(self):
@@ -75,8 +70,22 @@ class AlienInvasion:
 
     def _fire_bullet(self):
         """Создание нового снаряда и включение его в группу bullets."""
-        new_bullet = Bullet(self)
-        self.bullets.add(new_bullet)
+        if len(self.bullets) < self.settings.bullets_allowed:
+            new_bullet = Bullet(self)
+            self.bullets.add(new_bullet)
+
+    def __del_bullets(self):
+        """Удаление снарядов, вышедших за край экрана."""
+        for bullet in self.bullets.copy():
+            if bullet.rect.bottom <= 0:
+                self.bullets.remove(bullet)
+
+    def _update_bullets(self):
+        """Обновляет позицию снарядов и уничтожает старые снаряды."""
+        # Обновление позиции снарядов
+        self.bullets.update()
+        # Удаление снарядов вышедших за край экрана
+        self.__del_bullets()
 
     def _update_screen(self):
         """Refreshes the screen image and displays the new screen."""
