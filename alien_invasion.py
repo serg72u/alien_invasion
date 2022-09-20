@@ -68,7 +68,7 @@ class AlienInvasion:
 
     def _fire_bullet(self):
         """Создание нового снаряда и включение его в группу bullets."""
-        new_bullet = pygame.Bullet(self)
+        new_bullet = Bullet(self)
         self.bullets.add(new_bullet)
 
     def _update_screen(self):
