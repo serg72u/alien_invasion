@@ -29,11 +29,11 @@ class AlienInvasion:
         """Запуск основного цикла игры."""
         while True:
             self._check_events()
-            self.ship.update()
-            self.bullets.update()
+            self._update_ship()
+            self._update_bullets()
+            self._update_aliens()
             self._update_screen()
             self._update_bullets()
-
 
     def _check_events(self):
         """Обрабатывает нажатия клавиш и события мыши."""
@@ -71,6 +71,10 @@ class AlienInvasion:
         elif event.key == pygame.K_DOWN:
             self.ship.moving_down = False
 
+    def _update_ship(self):
+        """Обновляет корабль"""
+        self.ship.update()
+
     def _fire_bullet(self):
         """Создание нового снаряда и включение его в группу bullets."""
         if len(self.bullets) < self.settings.bullets_allowed:
@@ -89,6 +93,11 @@ class AlienInvasion:
         self.bullets.update()
         # Удаление снарядов вышедших за край экрана
         self.__del_bullets()
+
+    def _update_aliens(self):
+        """Обновляет позиции всех пришельцев во флоте."""
+        self._check_fleet_edges()
+        self.aliens.update()
 
     def _create_fleet(self):
         """Создание флота вторжения"""
@@ -111,11 +120,24 @@ class AlienInvasion:
 
     def _create_alien(self, alien_number, row_number):
         alien = Alien(self)
-        alien_width, alien_haight = alien.rect.size
+        alien_width, alien_height = alien.rect.size
         alien.x = alien_width + 2 * alien_width * alien_number
         alien.rect.x = alien.x
-        alien.rect.y = alien.rect.height + 2 * alien.rect.height * row_number
+        alien.rect.y = alien_height + 2 * alien_height * row_number
         self.aliens.add(alien)
+
+    def _check_fleet_edges(self):
+        """Реагирует на достижение пришельцами края экрана."""
+        for alien in self.aliens.sprites():
+            if alien.check_edges():
+                self._change_fleet_direction()
+            break
+
+    def _change_fleet_direction(self):
+        """Опускает весь флот и меняет направление флота."""
+        for alien in self.aliens.sprites():
+            alien.rect.y += self.settings.fleet_drop_speed
+        self.settings.fleet_direction *= -1
 
     def _update_screen(self):
         """Refreshes the screen image and displays the new screen."""
